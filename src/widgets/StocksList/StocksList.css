@@ -1,0 +1,14 @@
+.stocks-list .item {
+  padding-left: 16px;
+  padding-right: 16px;
+  cursor: pointer;
+}
+
+.stocks-list .item:hover {
+  background-color: var(--hover-color);
+}
+
+.stocks-list .item:active,
+.stocks-list .item:focus {
+  background-color: var(--focus-color);
+}

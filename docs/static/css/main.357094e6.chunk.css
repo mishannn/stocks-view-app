@@ -1,0 +1,2 @@
+:root{--hover-color:#f5f5f5;--focus-color:#efefef}.stocks-list .item{padding-left:8px;padding-right:8px;cursor:pointer}.stocks-list .item:hover{background-color:var(--hover-color)}.stocks-list .item:active,.stocks-list .item:focus{background-color:var(--focus-color)}.main-view{padding:8px}.main-layout .header{padding:8px 16px}.stock-details-view{padding:8px}
+/*# sourceMappingURL=main.357094e6.chunk.css.map */
