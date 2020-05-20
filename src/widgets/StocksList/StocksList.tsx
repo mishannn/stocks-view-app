@@ -1,39 +1,18 @@
-import React, { useEffect } from "react";
-import { List, Avatar } from "antd";
+import React from "react";
+import { List, Avatar, Button } from "antd";
 import { Stock } from "../../models/tinkoffTrading";
 import "./StocksList.css";
 
 export type SelectEventHandler = (stock: Stock) => void;
 
 export interface StocksListProps {
-  stocks: Stock[] | undefined;
+  stocks?: Stock[];
+  manage?: boolean;
   onSelect?: SelectEventHandler;
-  onLongPress?: SelectEventHandler;
+  onDelete?: SelectEventHandler;
 }
 
-let buttonPressTimer: NodeJS.Timeout | undefined = undefined;
-
 export default function StocksListComponent(props: StocksListProps) {
-  const handleButtonPress = (stock: Stock) => {
-    buttonPressTimer = setTimeout(() => props.onLongPress?.(stock), 500);
-  };
-
-  const handleButtonRelease = () => {
-    if (buttonPressTimer) {
-      clearTimeout(buttonPressTimer);
-      buttonPressTimer = undefined;
-    }
-  };
-
-  useEffect(() => {
-    return () => {
-      if (buttonPressTimer) {
-        clearTimeout(buttonPressTimer);
-        buttonPressTimer = undefined;
-      }
-    };
-  }, []);
-
   const handleListItemClick = (stock: Stock) => {
     props.onSelect?.(stock);
   };
@@ -76,31 +55,40 @@ export default function StocksListComponent(props: StocksListProps) {
     return `https://static.tinkoff.ru/brands/traiding/${logoName}`;
   };
 
+  const getContent = (stock: Stock) => {
+    if (props.manage) {
+      return (
+        <div className="delete-button-container">
+          <Button type="primary" danger onClick={() => props.onDelete?.(stock)}>
+            Delete
+          </Button>
+        </div>
+      );
+    }
+
+    return (
+      <div className="price-container">
+        <div className="stock-price">{getPriceText(stock)}</div>
+        <div className={getEarningsClassNames(stock).join(" ")}>
+          {getEarningsText(stock)}
+        </div>
+      </div>
+    );
+  };
+
   const renderListItem = (stock: Stock): JSX.Element => {
     return (
       <List.Item
         className={["item", stock.symbol.isin].join(" ")}
         key={stock.symbol.isin}
         onClick={() => handleListItemClick(stock)}
-        onTouchStart={() => handleButtonPress(stock)}
-        onTouchEnd={handleButtonRelease}
-        onMouseDown={() => handleButtonPress(stock)}
-        onMouseUp={handleButtonRelease}
-        onMouseLeave={handleButtonRelease}
-        onMouseMove={handleButtonRelease}
-        onTouchMove={handleButtonRelease}
       >
         <List.Item.Meta
           avatar={<Avatar src={getLogoUrl(stock)} />}
           title={stock.symbol.showName}
           description={stock.symbol.ticker}
         />
-        <div className="content">
-          <div className="stock-price">{getPriceText(stock)}</div>
-          <div className={getEarningsClassNames(stock).join(" ")}>
-            {getEarningsText(stock)}
-          </div>
-        </div>
+        <div className="content">{getContent(stock)}</div>
       </List.Item>
     );
   };

@@ -4,7 +4,7 @@
   cursor: pointer;
 }
 
-.stocks-list .item:hover {
+/* .stocks-list .item:hover {
   background-color: var(--hover-color);
   transition: background-color 0.3s;
 }
@@ -13,10 +13,19 @@
 .stocks-list .item:focus {
   background-color: var(--focus-color);
   transition: background-color 0.3s;
-}
+} */
 
 .stocks-list .item .content {
+  display: flex;
+  align-items: center;
+}
+
+.stocks-list .item .content .price-container {
   text-align: right;
+}
+
+.stocks-list .item .content .delete-button-container {
+  margin-left: 16px;
 }
 
 .stocks-list .item .stock-price {

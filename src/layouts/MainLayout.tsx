@@ -5,6 +5,7 @@ import "./MainLayout.css";
 export interface MainLayoutProps {
   title?: string;
   subtitle?: string;
+  extra?: React.ReactNode;
   onBack?: () => void;
 }
 
@@ -20,6 +21,7 @@ export default function MainLayoutComponent(
         onBack={props.onBack}
         title={props.title || titleSkeleton}
         subTitle={props.subtitle}
+        extra={props.extra}
       />
       <div className="body">{props.children}</div>
     </div>

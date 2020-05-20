@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./MainView.css";
 import TinkoffTradingApi from "../../api/TinkoffTradingApi";
 import MainLayoutComponent from "../../layouts/MainLayout";
@@ -17,6 +17,7 @@ const tradingApi = new TinkoffTradingApi();
 
 export default function MainViewComponent() {
   const [state, dispatch] = useAppStore();
+  const [manageModeEnabled, setManageModeEnabled] = useState(false);
   // const tickers = useSelector((state: RootState) => state.tickers.tickers);
 
   useEffect(() => {
@@ -36,13 +37,15 @@ export default function MainViewComponent() {
     // history.push(`/stock-details/${stock.symbol.ticker}`);
   };
 
-  const handleStockLongPress = (stock: Stock) => {
+  const handleStockDelete = (stock: Stock) => {
     confirm({
       title: `Do you want to delete ${stock.symbol.showName}?`,
       icon: <ExclamationCircleOutlined />,
       centered: true,
-      // content:
-      //   "When clicked the OK button, this dialog will be closed after 1 second",
+      okButtonProps: {
+        type: "primary",
+        danger: true,
+      },
       onOk() {
         dispatch(removeTicker(stock.symbol.ticker));
       },
@@ -50,26 +53,43 @@ export default function MainViewComponent() {
     });
   };
 
+  const handleManageButtonClick = () => {
+    setManageModeEnabled(!manageModeEnabled);
+  };
+
   return (
-    <MainLayoutComponent title="Stocks view">
+    <MainLayoutComponent
+      title="Stocks view"
+      extra={[
+        <Button
+          onClick={handleManageButtonClick}
+          type={manageModeEnabled ? "primary" : "default"}
+        >
+          {manageModeEnabled ? "Finish" : "Manage"}
+        </Button>,
+      ]}
+    >
       <div className="main-view">
         <div className="stock-list-container">
           <StocksListComponent
             stocks={state.stocks.stocks}
+            manage={manageModeEnabled}
             onSelect={handleStockSelect}
-            onLongPress={handleStockLongPress}
+            onDelete={handleStockDelete}
           />
         </div>
-        <Link to="/add-stock">
-          <Button
-            className="add-stock-button"
-            type="primary"
-            icon={<PlusOutlined />}
-            block
-          >
-            Add stock
-          </Button>
-        </Link>
+        {!manageModeEnabled && (
+          <Link to="/add-stock">
+            <Button
+              className="add-stock-button"
+              type="primary"
+              icon={<PlusOutlined />}
+              block
+            >
+              Add stock
+            </Button>
+          </Link>
+        )}
       </div>
     </MainLayoutComponent>
   );
