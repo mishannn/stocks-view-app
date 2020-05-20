@@ -1,5 +1,11 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios";
-import { Stock, Response, StocksList, Candle, CandlesList } from "../models/tinkoffTrading";
+import {
+  Stock,
+  Response,
+  StocksList,
+  Candle,
+  CandlesList,
+} from "../models/tinkoffTrading";
 import { subDays, formatISO } from "date-fns";
 
 const BASE_URL = "https://api.tinkoff.ru/trading";
@@ -19,15 +25,42 @@ export default class TinkoffTradingApi {
     });
   }
 
-  async getStocks(tickers: string[]): Promise<Stock[]> {
+  async getStocks(tickers?: string[]): Promise<Stock[]> {
+    const params: any = {
+      tickers,
+      country: "All",
+      orderType: "Desc",
+      sortType: "ByEarnings",
+    };
+
+    if (tickers) {
+      params.tickers = tickers;
+    }
+
     const stocksList = await this.requestMethod<StocksList>(
       RequestMethod.GetStocks,
-      {
-        tickers,
-        country: "All",
-        orderType: "Desc",
-        sortType: "ByPrice",
-      }
+      params
+    );
+
+    return stocksList.values;
+  }
+
+  async searchStocks(query?: string, amount = 20): Promise<Stock[]> {
+    const params: any = {
+      country: "All",
+      orderType: "Desc",
+      sortType: "ByEarnings",
+      start: 0,
+      end: amount,
+    };
+
+    if (query) {
+      params.filter = query;
+    }
+
+    const stocksList = await this.requestMethod<StocksList>(
+      RequestMethod.GetStocks,
+      params
     );
 
     return stocksList.values;
@@ -41,12 +74,15 @@ export default class TinkoffTradingApi {
     const dateTo = new Date();
     const dateFrom = subDays(dateTo, 1);
 
-    const candles = await this.requestMethod<CandlesList>(RequestMethod.GetCandles, {
-      from: formatISO(dateFrom),
-      to: formatISO(dateTo),
-      resolution: 5,
-      ticker,
-    });
+    const candles = await this.requestMethod<CandlesList>(
+      RequestMethod.GetCandles,
+      {
+        from: formatISO(dateFrom),
+        to: formatISO(dateTo),
+        resolution: 5,
+        ticker,
+      }
+    );
 
     return candles.candles;
   }

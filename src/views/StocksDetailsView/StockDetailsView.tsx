@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import "./StockDetailsView.css";
 import { Stock, Candle } from "../../models/tinkoffTrading";
 import TinkoffTradingApi from "../../api/TinkoffTradingApi";
@@ -14,7 +14,6 @@ export interface StockDetailsViewRouteParams {
 }
 
 export default function StockDetailsViewComponent() {
-  const history = useHistory();
   const params = useParams<StockDetailsViewRouteParams>();
   const tickerRef = useRef<string>();
   const [stock, setStock] = useState<Stock>();
@@ -92,7 +91,12 @@ export default function StockDetailsViewComponent() {
 
   const candlesChart = (
     <div className="chart-container">
-      <Line data={getChartData()} options={chartOptions} width={4000} height={400} />
+      <Line
+        data={getChartData()}
+        options={chartOptions}
+        width={4000}
+        height={400}
+      />
     </div>
   );
 
@@ -100,7 +104,6 @@ export default function StockDetailsViewComponent() {
     <MainLayoutComponent
       title={stock?.symbol.showName}
       subtitle={stock?.symbol.ticker}
-      onBack={() => history.goBack()}
     >
       <div className="stock-details-view">{candles && candlesChart}</div>
     </MainLayoutComponent>

@@ -4,14 +4,14 @@
   cursor: pointer;
 }
 
-.stocks-list .item:hover {
+/* .stocks-list .item:hover {
   background-color: var(--hover-color);
 }
 
 .stocks-list .item:active,
 .stocks-list .item:focus {
   background-color: var(--focus-color);
-}
+} */
 
 .stocks-list .item .content {
   text-align: right;
