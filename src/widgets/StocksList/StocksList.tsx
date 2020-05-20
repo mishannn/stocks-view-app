@@ -16,7 +16,7 @@ export default function StocksListComponent(props: StocksListProps) {
   };
 
   const getPriceText = (stock: Stock) => {
-    const fixedPrice = stock.price.value;
+    const fixedPrice = stock.price.value.toFixed(2);
     const priceCurrency = stock.price.currency;
 
     return `${fixedPrice} ${priceCurrency}`;
