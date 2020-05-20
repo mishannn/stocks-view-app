@@ -77,7 +77,9 @@ export default function AddStockViewComponent() {
             prefix={<SearchOutlined />}
           />
         </div>
-        <StocksListComponent stocks={stocks} onSelect={handleStockSelect} />
+        <div className="stocks-list-container">
+          <StocksListComponent stocks={stocks} onSelect={handleStockSelect} />
+        </div>
       </div>
     </MainLayoutComponent>
   );

@@ -87,6 +87,8 @@ export default function StocksListComponent(props: StocksListProps) {
         onMouseDown={() => handleButtonPress(stock)}
         onMouseUp={handleButtonRelease}
         onMouseLeave={handleButtonRelease}
+        onMouseMove={handleButtonRelease}
+        onTouchMove={handleButtonRelease}
       >
         <List.Item.Meta
           avatar={<Avatar src={getLogoUrl(stock)} />}
