@@ -6,7 +6,7 @@ import StockDetailsViewComponent from "./views/StocksDetailsView/StockDetailsVie
 
 export function AppComponent() {
   return (
-    <Router>
+    <Router basename={process.env.PUBLIC_URL}>
       <div className="stocks-view-app">
         <Switch>
           <Route exact path="/" component={MainViewComponent} />
