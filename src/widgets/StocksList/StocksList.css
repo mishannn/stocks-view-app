@@ -12,3 +12,19 @@
 .stocks-list .item:focus {
   background-color: var(--focus-color);
 }
+
+.stocks-list .item .content {
+  text-align: right;
+}
+
+.stocks-list .item .stock-price {
+  font-weight: 500;
+}
+
+.stocks-list .item .stock-earnings.positive {
+  color: #00ae00;
+}
+
+.stocks-list .item .stock-earnings.negative {
+  color: #e40000;
+}
