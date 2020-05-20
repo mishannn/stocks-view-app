@@ -1,6 +1,7 @@
 {
   "name": "stocks-view",
   "version": "0.1.0",
+  "homepage": "/stocks-view-app",
   "private": true,
   "dependencies": {
     "@testing-library/dom": ">=5",
@@ -25,7 +26,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "rm -rf build && react-scripts build && mv build docs",
+    "build": "rm -rf build docs && react-scripts build && mv build docs",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
