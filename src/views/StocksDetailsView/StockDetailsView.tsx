@@ -122,7 +122,7 @@ export default function StockDetailsViewComponent() {
     chart.source(data, {
       price: {
         formatter: (val: number) => {
-          return val.toFixed(2);
+          return `${val.toFixed(2)} ${getCurrencySymbol(stock.price.currency)}`;
         },
       },
     });
