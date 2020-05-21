@@ -1,7 +1,9 @@
 import React from "react";
 import { List, Avatar, Button } from "antd";
 import { Stock } from "../../models/tinkoffTrading";
+import { CaretUpOutlined, CaretDownOutlined } from "@ant-design/icons";
 import "./StocksList.css";
+import getCurrencySymbol from "../../utils/getCurrencySymbol";
 
 export type SelectEventHandler = (stock: Stock) => void;
 
@@ -19,9 +21,9 @@ export default function StocksListComponent(props: StocksListProps) {
 
   const getPriceText = (stock: Stock) => {
     const fixedPrice = stock.price.value.toFixed(2);
-    const priceCurrency = stock.price.currency;
+    const priceCurrencySymbol = getCurrencySymbol(stock.price.currency);
 
-    return `${fixedPrice} ${priceCurrency}`;
+    return `${fixedPrice} ${priceCurrencySymbol}`;
   };
 
   const getEarningsClassNames = (stock: Stock) => {
@@ -40,14 +42,28 @@ export default function StocksListComponent(props: StocksListProps) {
     return classNames;
   };
 
+  const getEarningsCaret = (stock: Stock) => {
+    if (stock.earnings.relative === 0) {
+      return undefined;
+    }
+
+    return stock.earnings.relative > 0 ? (
+      <CaretUpOutlined className="stock-earnings-caret" />
+    ) : (
+      <CaretDownOutlined className="stock-earnings-caret" />
+    );
+  };
+
   const getEarningsText = (stock: Stock) => {
     const earningsFixedAbsoluteValue = stock.earnings.absolute.value.toFixed(2);
-    const earningsCurrency = stock.earnings.absolute.currency;
+    const earningsCurrencySymbol = getCurrencySymbol(
+      stock.earnings.absolute.currency
+    );
     const earningsFixedRelativeValue = Math.abs(
       stock.earnings.relative * 100
     ).toFixed(2);
 
-    return `${earningsFixedAbsoluteValue} ${earningsCurrency} (${earningsFixedRelativeValue}%)`;
+    return `${earningsFixedAbsoluteValue} ${earningsCurrencySymbol} (${earningsFixedRelativeValue}%)`;
   };
 
   const getLogoUrl = (stock: Stock) => {
@@ -70,6 +86,7 @@ export default function StocksListComponent(props: StocksListProps) {
       <div className="price-container">
         <div className="stock-price">{getPriceText(stock)}</div>
         <div className={getEarningsClassNames(stock).join(" ")}>
+          {getEarningsCaret(stock)}
           {getEarningsText(stock)}
         </div>
       </div>

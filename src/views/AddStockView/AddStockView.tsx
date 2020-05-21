@@ -61,8 +61,7 @@ export default function AddStockViewComponent() {
   }, [debouncedQuery]);
 
   const handleStockSelect = (stock: Stock) => {
-    dispatch(addTicker(stock.symbol.ticker));
-    history.push("/");
+    history.push(`/stock-details/${stock.symbol.ticker}`);
   };
 
   return (

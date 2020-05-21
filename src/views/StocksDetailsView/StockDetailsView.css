@@ -1,8 +1,21 @@
-/* .stock-details-view {
-  padding: 8px;
-} */
+.stock-details-view {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-height: 100%;
+}
 
-.stock-details-view .chart-container {
-  width: 4000px;
-  height: 400px;
+.stock-details-view .details-container {
+  flex: 1;
+  overflow: auto;
+}
+
+.stock-details-view .details-container .chart-canvas {
+  width: 100%;
+}
+
+.stock-details-view .details-container .details-price {
+  text-align: center;
+  font-weight: bold;
+  font-size: 24px;
 }

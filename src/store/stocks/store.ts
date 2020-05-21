@@ -9,27 +9,30 @@ const addStockReducer = (
   state: StocksState,
   action: AddStockAction
 ): StocksState => {
-  if (state.stocks.includes(action.stock)) {
+  const stocks = state.stocks ? state.stocks : [];
+
+  if (stocks.find((stock) => stock.symbol.isin === action.stock.symbol.isin)) {
     return state;
   }
-  return { ...state, stocks: [...state.stocks, action.stock] };
+
+  return { ...state, stocks: [...stocks, action.stock] };
 };
 
 const removeStockReducer = (
   state: StocksState,
   action: RemoveStockAction
 ): StocksState => {
-  if (state.stocks.includes(action.stock)) {
+  const stocks = state.stocks ? state.stocks : [];
+
+  if (!stocks.find((stock) => stock.symbol.isin === action.stock.symbol.isin)) {
     return state;
   }
-  return {
-    ...state,
-    stocks: state.stocks.filter((stock) => stock !== action.stock),
-  };
+
+  return { ...state, stocks: stocks.filter((stock) => stock !== action.stock) };
 };
 
 const initialState: StocksState = {
-  stocks: [],
+  stocks: undefined,
 };
 
 export const stocksReducer = (
@@ -47,7 +50,7 @@ export const stocksReducer = (
       return removeStockReducer(state, action);
 
     case "CLEAR_STOCKS":
-      return { ...state, stocks: [] };
+      return { ...state, stocks: undefined };
 
     default:
       return state;

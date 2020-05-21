@@ -39,3 +39,7 @@
 .stocks-list .item .stock-earnings.negative {
   color: #e40000;
 }
+
+.stocks-list .item .stock-earnings-caret {
+  margin-right: 2px;
+}

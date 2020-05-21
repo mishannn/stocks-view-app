@@ -1,7 +1,7 @@
 import { Stock } from "../../models/tinkoffTrading";
 
 export interface StocksState {
-  stocks: Stock[];
+  stocks: Stock[] | undefined;
 }
 
 export const SET_STOCKS = "SET_STOCKS";

@@ -6,8 +6,9 @@ import StockDetailsViewComponent from "./views/StocksDetailsView/StockDetailsVie
 import AddStockViewComponent from "./views/AddStockView/AddStockView";
 // @ts-ignore
 import { AnimatedSwitch, spring } from "react-router-transition";
-import { useAppStore } from "./store/store";
+import { useAppStore, store } from "./store/store";
 import { setTickers } from "./store/tickers/actions";
+import { Switch } from "react-router-dom";
 
 // we need to map the `scale` prop we define below
 // to the transform style property
@@ -45,38 +46,40 @@ const bounceTransition = {
   },
 };
 
+function loadTickers() {
+  try {
+    const tickersJson = localStorage.getItem("tickers");
+    if (!tickersJson) {
+      throw new Error();
+    }
+
+    const tickers = JSON.parse(tickersJson);
+    store.dispatch(setTickers(tickers));
+  } catch (e) {}
+}
+
+loadTickers();
+
 export function AppComponent() {
-  const [, dispatch] = useAppStore();
-
-  useEffect(() => {
-    try {
-      const tickersJson = localStorage.getItem("tickers");
-      if (!tickersJson) {
-        throw new Error();
-      }
-
-      const tickers = JSON.parse(tickersJson);
-      dispatch(setTickers(tickers));
-    } catch (e) {}
-  }, []); // eslint-disable-line
-
   return (
     <Router basename={process.env.PUBLIC_URL}>
       <div className="stocks-view-app">
-        <AnimatedSwitch
+        <Switch>
+          {/* <AnimatedSwitch
           atEnter={bounceTransition.atEnter}
           atLeave={bounceTransition.atLeave}
           atActive={bounceTransition.atActive}
           mapStyles={mapStyles}
           className="route-wrapper"
-        >
+        > */}
           <Route exact path="/" component={MainViewComponent} />
           <Route
             path="/stock-details/:ticker"
             component={StockDetailsViewComponent}
           />
           <Route path="/add-stock" component={AddStockViewComponent} />
-        </AnimatedSwitch>
+          {/* </AnimatedSwitch> */}
+        </Switch>
       </div>
     </Router>
   );
