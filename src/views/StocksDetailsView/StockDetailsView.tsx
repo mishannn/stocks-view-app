@@ -6,8 +6,7 @@ import TinkoffTradingApi from "../../api/TinkoffTradingApi";
 import MainLayoutComponent from "../../layouts/MainLayout";
 // @ts-ignore
 import F2 from "@antv/f2/lib/index-all";
-import { format, fromUnixTime } from "date-fns";
-import interval from "interval-promise";
+import { fromUnixTime, format, sub } from "date-fns";
 import getCurrencySymbol from "../../utils/getCurrencySymbol";
 import BottomButtonComponent from "../../components/BottomButton/BottomButton";
 import {
@@ -18,6 +17,7 @@ import {
 import confirm from "antd/lib/modal/confirm";
 import { removeTicker, addTicker } from "../../store/tickers/actions";
 import { useAppStore } from "../../store/store";
+import { Spin } from "antd";
 
 const tradingApi = new TinkoffTradingApi();
 
@@ -106,69 +106,58 @@ export default function StockDetailsViewComponent() {
     const chart = new F2.Chart({
       id: "chart",
       pixelRatio: window.devicePixelRatio,
-      // padding: ['auto', 0, 0, 'auto'],
-      // appendPadding: [15, 0, 0, 15],
     });
 
-    const data = candles.map((candle, index) => ({
-      index,
-      date: candle.date,
+    const data = candles.map((candle) => ({
+      date: fromUnixTime(candle.date),
       price: candle.c,
     }));
 
     // const dateMax = data[data.length - 1].date;
-    // const dateMin = dateMax - 24 * 3600;
+    // const dateMin = sub(dateMax, { hours: 6 });
 
     chart.source(data, {
+      date: {
+        type: "timeCat",
+        mask: "HH:mm",
+        values: data.slice(-96).map((item) => item.date),
+      },
       price: {
         formatter: (val: number) => {
           return `${val.toFixed(2)} ${getCurrencySymbol(stock.price.currency)}`;
         },
       },
     });
+
     chart.tooltip({
       showCrosshairs: true,
       showItemMarker: false,
       background: {
         radius: 2,
         fill: "#1890FF",
-        padding: [3, 5],
+        // padding: [3, 5],
       },
       nameStyle: {
         fill: "#fff",
       },
       onShow: (ev: any) => {
         const items = ev.items;
-        console.log(items);
-        items[0].name = format(
-          fromUnixTime(items[0].origin.date),
-          "HH:mm MM/dd"
-        );
-        items[0].value = `${items[0].value} ${getCurrencySymbol(
-          stock.price.currency
-        )}`;
+        // console.log(items);
+        items[0].name = items[0].title;
       },
     });
-    chart.area().position("index*price");
-    chart.line().position("index*price");
-    chart.axis("index", false);
+
+    chart.scrollBar({
+      mode: "x",
+      xStyle: {
+        offsetY: -5,
+      },
+    });
+
+    chart.area().position("date*price").shape("smooth");
+    chart.line().position("date*price").shape("smooth");
 
     chart.interaction("pan");
-    // chart.scrollBar({
-    //   mode: "x",
-    //   xStyle: {
-    //     offsetY: -5,
-    //   },
-    // });
-
-    chart.guide().tag({
-      position: [1969, 1344],
-      withPoint: false,
-      content: "1,344",
-      limitInPlot: true,
-      offsetX: 5,
-      direct: "cr",
-    });
     chart.render();
   }, [candles, stock]);
 
@@ -227,23 +216,33 @@ export default function StockDetailsViewComponent() {
     );
   };
 
+  const getDetails = () => {
+    if (!candles || !stock) {
+      return (
+        <div className="spin-container">
+          <Spin />
+        </div>
+      );
+    }
+
+    return (
+      <div className="details">
+        <canvas className="chart-canvas" id="chart" />
+        <div className="details-price">
+          {candles[candles.length - 1].c}{" "}
+          {getCurrencySymbol(stock.price.currency)}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <MainLayoutComponent
       title={stock?.symbol.showName}
       subtitle={stock?.symbol.ticker}
     >
       <div className="stock-details-view">
-        <div className="details-container">
-          {candles && stock && (
-            <div className="details">
-              <canvas className="chart-canvas" id="chart" />
-              <div className="details-price">
-                {candles[candles.length - 1].c}{" "}
-                {getCurrencySymbol(stock.price.currency)}
-              </div>
-            </div>
-          )}
-        </div>
+        <div className="details-container">{getDetails()}</div>
         {getStockActionButton()}
       </div>
     </MainLayoutComponent>
