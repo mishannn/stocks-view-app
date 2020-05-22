@@ -6,7 +6,7 @@ import TinkoffTradingApi from "../../api/TinkoffTradingApi";
 import MainLayoutComponent from "../../layouts/MainLayout";
 // @ts-ignore
 import F2 from "@antv/f2/lib/index-all";
-import { fromUnixTime, format, sub } from "date-fns";
+import { fromUnixTime } from "date-fns";
 import getCurrencySymbol from "../../utils/getCurrencySymbol";
 import BottomButtonComponent from "../../components/BottomButton/BottomButton";
 import {
@@ -64,44 +64,10 @@ export default function StockDetailsViewComponent() {
 
     updateStock();
     updateCandles();
-
-    // let intervalStopped = false;
-    // interval(async (_iteration, stop) => {
-    //   if (intervalStopped) {
-    //     stop();
-    //     return;
-    //   }
-
-    //   return updateStock();
-    // }, 2500);
-
-    // return () => {
-    //   intervalStopped = true;
-    // };
   }, [tickerRef]);
 
   useEffect(() => {
     if (!candles || !stock) return;
-
-    // const data = {
-    //   labels: candles.map((candle) =>
-    //     format(fromUnixTime(candle.date), "HH:mm")
-    //   ),
-    //   datasets: [
-    //     {
-    //       name: "Price",
-    //       type: "bar",
-    //       values: candles?.map((candle) => candle.c),
-    //     },
-    //   ],
-    // };
-
-    // new Chart("#chart", {
-    //   data: data,
-    //   type: "bar",
-    //   height: 250,
-    //   colors: ["#1890ff"],
-    // });
 
     const chart = new F2.Chart({
       id: "chart",
@@ -112,9 +78,6 @@ export default function StockDetailsViewComponent() {
       date: fromUnixTime(candle.date),
       price: candle.c,
     }));
-
-    // const dateMax = data[data.length - 1].date;
-    // const dateMin = sub(dateMax, { hours: 6 });
 
     chart.source(data, {
       date: {
