@@ -20,7 +20,19 @@
 }
 
 .stock-details-view .details-container .details-price {
-  text-align: center;
   font-weight: bold;
   font-size: 24px;
+  padding: 8px 16px;
+}
+
+.stock-details-view .details-container .details-posts {
+  padding: 0px 16px;
+}
+
+.comment .comment-likes .like-icon {
+  margin-right: 8px;
+}
+
+.read-more-button {
+  color: #1890ff;
 }

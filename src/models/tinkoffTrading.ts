@@ -118,6 +118,58 @@ export interface CandlesList {
   candles: Candle[];
 }
 
+export interface PulseCommentInstrument {
+  briefName: string;
+  currency: string;
+  dailyYield: any;
+  image: string;
+  lastPrice: number;
+  price: number;
+  relativeDailyYield: number;
+  relativeYield: number;
+  ticker: string;
+  type: string;
+}
+
+export interface PulseCommentProfile {
+  id: string;
+  nickname: string;
+}
+
+export interface PulseComment {
+  id: string;
+  image: string;
+  inserted: string;
+  instruments: PulseCommentInstrument[];
+  isLiked: boolean;
+  likesCount: number;
+  nickname: string;
+  profileId: string;
+  profiles: PulseCommentProfile[];
+  text: string;
+}
+
+export interface PulsePost extends PulseComment {
+  commentsCount: Number;
+  isEditable: boolean;
+  postImages: any[];
+  profiles: any[];
+  serviceTags: any[];
+}
+
+export interface PulsePostList {
+  hasNext: false;
+  items: PulsePost[];
+  nextCursor: number;
+}
+
+export interface PulseCommentList {
+  hasNext: false;
+  items: PulseComment[];
+  nextCursor: number;
+  totalCount: number;
+}
+
 export interface Error {
   message: string;
   code: string;

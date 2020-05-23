@@ -7,8 +7,6 @@ import TinkoffTradingApi from "../../api/TinkoffTradingApi";
 import { Stock } from "../../models/tinkoffTrading";
 import StocksListComponent from "../../widgets/StocksList/StocksList";
 import { useHistory } from "react-router-dom";
-import { useAppStore } from "../../store/store";
-import { addTicker } from "../../store/tickers/actions";
 
 const tradingApi = new TinkoffTradingApi();
 
@@ -41,7 +39,6 @@ export default function AddStockViewComponent() {
   const [query, setQuery] = useState<string>();
   const [stocks, setStocks] = useState<Stock[]>();
   const debouncedQuery = useDebounce(query, 200);
-  const [, dispatch] = useAppStore();
 
   useEffect(() => {
     const updateStocks = async (): Promise<void> => {
