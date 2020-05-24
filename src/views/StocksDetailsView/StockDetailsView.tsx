@@ -126,7 +126,7 @@ export default function StockDetailsViewComponent() {
       date: {
         type: "timeCat",
         mask: "HH:mm",
-        values: data.slice(-96).map((item) => item.date),
+        values: data.slice(-60).map((item) => item.date),
       },
       price: {
         formatter: (val: number) => {
@@ -252,7 +252,9 @@ export default function StockDetailsViewComponent() {
           author={comment.nickname}
           avatar={getPostOrCommentAvatar(comment)}
           content={
-            <ReadMoreReact text={comment.text.replace(/\{(.*?)\}/g, "$1")} />
+            <div className="comment-content">
+              <ReadMoreReact text={comment.text.replace(/\{\$(.*?)\}/g, "$1")} />
+            </div>
           }
           datetime={formatDistanceToNow(parseISO(comment.inserted), {
             addSuffix: true,
@@ -282,7 +284,9 @@ export default function StockDetailsViewComponent() {
           author={post.nickname}
           avatar={getPostOrCommentAvatar(post)}
           content={
-            <ReadMoreReact text={post.text.replace(/\{\$(.*?)\}/g, "$1")} />
+            <div className="comment-content">
+              <ReadMoreReact text={post.text.replace(/\{\$(.*?)\}/g, "$1")} />
+            </div>
           }
           datetime={formatDistanceToNow(parseISO(post.inserted), {
             addSuffix: true,
